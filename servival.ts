@@ -212,7 +212,9 @@ function attack(player: Wizard | SwordMan) {
 function isWizard(player: Player): player is Wizard {
   return "castMagic" in player;
 }
-
+const player = {
+  slashWord: () => console.log("slashWord"),
+};
 function attack2(player: Wizard | SwordMan) {
   if (isWizard(player)) {
     player.castMagic();
@@ -220,7 +222,7 @@ function attack2(player: Wizard | SwordMan) {
     player.slashSword();
   }
 }
-attack2("slashSword");
+attack2(player);
 
 function getMonth2(date: string | Date) {
   const isDate = date instanceof Date;
@@ -228,3 +230,43 @@ function getMonth2(date: string | Date) {
     console.log(date.getMonth() + 1);
   }
 }
+
+// unknown .. 型が何かわからない時。型安全なany型
+
+// unknown型を配列に絞り込む ... isArray()
+// unknown型をオブジェクト型に絞り込む
+type Email = {
+  from: string;
+  to: string;
+  title: string;
+  subject: string;
+};
+function isEmail(value: unknown) {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const email = value as Record<keyof Email, unknown>;
+  if (typeof email.from !== "string") {
+    return false;
+  }
+  return true;
+}
+
+// 関数
+const objFunc = {
+  func: () => {
+    console.log("関数式をオブジェクトのプロパティに直接代入");
+  },
+};
+
+// 関数式の関数名。再帰関数で使う
+const factorial = function fact(n) {
+  if (n <= 1) {
+    return 1;
+  }
+  return n * fact(n - 1);
+};
+
+// 関数の型宣言構文
+type Increment = (num: number) => number;
+const increment: Increment = (num) => num + 1;
